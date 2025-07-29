@@ -31,13 +31,13 @@ unsigned long lastBlinkTime = 0;
 unsigned long nextBlinkDelay = 0;
 bool isBlinking = false;
 unsigned long blinkStartTime = 0;
-const int blinkDuration = 150;
+const int BLINK_DURATION = 150;
 
 unsigned long lastEmoteTime = 0;
 unsigned long nextEmoteDelay = 0;
 bool isSpecialEmote = false;
 unsigned long emoteStartTime = 0;
-const int emoteDuration = 2000;
+const int EMOTE_DURATION = 2000;
 int currentEmote = 0; // 0=smile, 1=uwu, 2=worried(almost full), 3=heart eyes, 4=sleepy, 5=tongue out, 6=wink
 
 // Animation state tracking to prevent unnecessary redraws
@@ -46,7 +46,7 @@ int lastEmoteType = -1;
 bool needsRedraw = true;
 int lastDisplayedPercentage = -1; // Track displayed percentage for normal mode
 
-// Cura's custom characters for cute expressions
+// Cura's animations
 byte openEye[8] = {
   B00000,
   B01110,
@@ -135,7 +135,7 @@ byte worriedEye[8] = {
   B00000
 };
 
-// Additional cute emotes
+
 byte heartEye[8] = {
   B00000,
   B01010,
@@ -238,12 +238,11 @@ void setup() {
   Serial.begin(9600);
   
   // Initialize LCD
-  lcd.begin();
+  lcd.begin(16, 2);
   lcd.clear();
   lcd.backlight();
   
   // Create Cura's custom characters (we'll dynamically load them based on emotes)
-  // Base characters always loaded
   lcd.createChar(0, openEye);
   lcd.createChar(1, closedEye);
   lcd.createChar(2, neutralMouth);
@@ -441,59 +440,88 @@ void drawCura(bool eyesClosed, int emoteType) {
     lcd.setCursor(7, 0);  // Left eye
     if (eyesClosed) {
       lcd.write(1); // Closed eye
-    } else if (emoteType == 1) { // UwU
-      lcd.write(6); // Happy eye
-    } else if (emoteType == 2) { // Worried
-      lcd.write(7); // Worried eye
-    } else if (emoteType == 3) { // Heart eyes
-      lcd.write(6); // Use heartEye (loaded in slot 6)
-    } else if (emoteType == 4) { // Sleepy
-      lcd.write(6); // Use sleepyEye (loaded in slot 6)
-    } else if (emoteType == 5) { // Tongue out
-      lcd.write(0); // Normal eye
-    } else if (emoteType == 6) { // Wink
-      lcd.write(6); // Use winkEye (loaded in slot 6)
     } else {
-      lcd.write(0); // Normal open eye
+      switch (emoteType) {
+        case 1: // UwU
+          lcd.write(6); // Happy eye
+          break;
+        case 2: // Worried
+          lcd.write(7); // Worried eye
+          break;
+        case 3: // Heart eyes
+          lcd.write(6); // Use heartEye (loaded in slot 6)
+          break;
+        case 4: // Sleepy
+          lcd.write(6); // Use sleepyEye (loaded in slot 6)
+          break;
+        case 5: // Tongue out
+          lcd.write(0); // Normal eye
+          break;
+        case 6: // Wink
+          lcd.write(6); // Use winkEye (loaded in slot 6)
+          break;
+        default:
+          lcd.write(0); // Normal open eye
+          break;
+      }
     }
     
     lcd.setCursor(9, 0); // Right eye
     if (eyesClosed) {
       lcd.write(1); // Closed eye
-    } else if (emoteType == 1) { // UwU
-      lcd.write(6); // Happy eye
-    } else if (emoteType == 2) { // Worried
-      lcd.write(7); // Worried eye
-    } else if (emoteType == 3) { // Heart eyes
-      lcd.write(6); // Use heartEye (loaded in slot 6)
-    } else if (emoteType == 4) { // Sleepy
-      lcd.write(6); // Use sleepyEye (loaded in slot 6)
-    } else if (emoteType == 5) { // Tongue out
-      lcd.write(0); // Normal eye
-    } else if (emoteType == 6) { // Wink
-      lcd.write(1); // Closed eye for wink
     } else {
-      lcd.write(0); // Normal open eye
+      switch (emoteType) {
+        case 1: // UwU
+          lcd.write(6); // Happy eye
+          break;
+        case 2: // Worried
+          lcd.write(7); // Worried eye
+          break;
+        case 3: // Heart eyes
+          lcd.write(6); // Use heartEye (loaded in slot 6)
+          break;
+        case 4: // Sleepy
+          lcd.write(6); // Use sleepyEye (loaded in slot 6)
+          break;
+        case 5: // Tongue out
+          lcd.write(0); // Normal eye
+          break;
+        case 6: // Wink
+          lcd.write(1); // Closed eye for wink
+          break;
+        default:
+          lcd.write(0); // Normal open eye
+          break;
+      }
     }
     
     // Draw mouth (centered)
     lcd.setCursor(8, 1);
-    if (emoteType == 1) { // UwU
-      lcd.write(4); // UwU mouth
-    } else if (emoteType == 2) { // Worried
-      lcd.write(5); // Worried mouth
-    } else if (emoteType == 3) { // Heart eyes
-      lcd.write(7); // Use kissMouth (loaded in slot 7)
-    } else if (emoteType == 4) { // Sleepy
-      lcd.write(2); // Neutral mouth
-    } else if (emoteType == 5) { // Tongue out
-      lcd.write(7); // Use tongueOut (loaded in slot 7)
-    } else if (emoteType == 6) { // Wink
-      lcd.write(7); // Use giggleMouth (loaded in slot 7)
-    } else if (emoteType == 0) { // Smile
-      lcd.write(3); // Smile mouth
-    } else {
-      lcd.write(2); // Neutral mouth
+    switch (emoteType) {
+      case 1: // UwU
+        lcd.write(4); // UwU mouth
+        break;
+      case 2: // Worried
+        lcd.write(5); // Worried mouth
+        break;
+      case 3: // Heart eyes
+        lcd.write(7); // Use kissMouth (loaded in slot 7)
+        break;
+      case 4: // Sleepy
+        lcd.write(2); // Neutral mouth
+        break;
+      case 5: // Tongue out
+        lcd.write(7); // Use tongueOut (loaded in slot 7)
+        break;
+      case 6: // Wink
+        lcd.write(7); // Use giggleMouth (loaded in slot 7)
+        break;
+      case 0: // Smile
+        lcd.write(3); // Smile mouth
+        break;
+      default:
+        lcd.write(2); // Neutral mouth
+        break;
     }
     
     // Add percentage in bottom left
@@ -518,59 +546,88 @@ void drawCuraNormal(bool eyesClosed, int emoteType) {
   lcd.setCursor(13, 0);
   if (eyesClosed) {
     lcd.write(1); // Closed eye
-  } else if (emoteType == 1) { // UwU
-    lcd.write(6); // Happy eye
-  } else if (emoteType == 2) { // Worried
-    lcd.write(7); // Worried eye
-  } else if (emoteType == 3) { // Heart eyes
-    lcd.write(6); // Use heartEye
-  } else if (emoteType == 4) { // Sleepy
-    lcd.write(6); // Use sleepyEye
-  } else if (emoteType == 5) { // Tongue out
-    lcd.write(0); // Normal eye
-  } else if (emoteType == 6) { // Wink
-    lcd.write(6); // Use winkEye
   } else {
-    lcd.write(0); // Normal open eye
+    switch (emoteType) {
+      case 1: // UwU
+        lcd.write(6); // Happy eye
+        break;
+      case 2: // Worried
+        lcd.write(7); // Worried eye
+        break;
+      case 3: // Heart eyes
+        lcd.write(6); // Use heartEye
+        break;
+      case 4: // Sleepy
+        lcd.write(6); // Use sleepyEye
+        break;
+      case 5: // Tongue out
+        lcd.write(0); // Normal eye
+        break;
+      case 6: // Wink
+        lcd.write(6); // Use winkEye
+        break;
+      default:
+        lcd.write(0); // Normal open eye
+        break;
+    }
   }
   
   lcd.setCursor(15, 0);
   if (eyesClosed) {
     lcd.write(1); // Closed eye
-  } else if (emoteType == 1) { // UwU
-    lcd.write(6); // Happy eye
-  } else if (emoteType == 2) { // Worried
-    lcd.write(7); // Worried eye
-  } else if (emoteType == 3) { // Heart eyes
-    lcd.write(6); // Use heartEye
-  } else if (emoteType == 4) { // Sleepy
-    lcd.write(6); // Use sleepyEye
-  } else if (emoteType == 5) { // Tongue out
-    lcd.write(0); // Normal eye
-  } else if (emoteType == 6) { // Wink
-    lcd.write(1); // Closed eye for wink
   } else {
-    lcd.write(0); // Normal open eye
+    switch (emoteType) {
+      case 1: // UwU
+        lcd.write(6); // Happy eye
+        break;
+      case 2: // Worried
+        lcd.write(7); // Worried eye
+        break;
+      case 3: // Heart eyes
+        lcd.write(6); // Use heartEye
+        break;
+      case 4: // Sleepy
+        lcd.write(6); // Use sleepyEye
+        break;
+      case 5: // Tongue out
+        lcd.write(0); // Normal eye
+        break;
+      case 6: // Wink
+        lcd.write(1); // Closed eye for wink
+        break;
+      default:
+        lcd.write(0); // Normal open eye
+        break;
+    }
   }
   
   // Draw mouth
   lcd.setCursor(14, 1);
-  if (emoteType == 1) { // UwU
-    lcd.write(4); // UwU mouth
-  } else if (emoteType == 2) { // Worried
-    lcd.write(5); // Worried mouth
-  } else if (emoteType == 3) { // Heart eyes
-    lcd.write(7); // Use kissMouth
-  } else if (emoteType == 4) { // Sleepy
-    lcd.write(2); // Neutral mouth
-  } else if (emoteType == 5) { // Tongue out
-    lcd.write(7); // Use tongueOut
-  } else if (emoteType == 6) { // Wink
-    lcd.write(7); // Use giggleMouth
-  } else if (emoteType == 0) { // Smile
-    lcd.write(3); // Smile mouth
-  } else {
-    lcd.write(2); // Neutral mouth
+  switch (emoteType) {
+    case 1: // UwU
+      lcd.write(4); // UwU mouth
+      break;
+    case 2: // Worried
+      lcd.write(5); // Worried mouth
+      break;
+    case 3: // Heart eyes
+      lcd.write(7); // Use kissMouth
+      break;
+    case 4: // Sleepy
+      lcd.write(2); // Neutral mouth
+      break;
+    case 5: // Tongue out
+      lcd.write(7); // Use tongueOut
+      break;
+    case 6: // Wink
+      lcd.write(7); // Use giggleMouth
+      break;
+    case 0: // Smile
+      lcd.write(3); // Smile mouth
+      break;
+    default:
+      lcd.write(2); // Neutral mouth
+      break;
   }
 }
 
@@ -584,7 +641,7 @@ void updateCuraAnimation() {
       blinkStartTime = currentTime;
     }
   } else {
-    if (currentTime - blinkStartTime >= blinkDuration) {
+    if (currentTime - blinkStartTime >= BLINK_DURATION) {
       isBlinking = false;
       lastBlinkTime = currentTime;
       nextBlinkDelay = random(2000, 6000);
@@ -607,7 +664,7 @@ void updateCuraAnimation() {
       }
     }
   } else {
-    if (currentTime - emoteStartTime >= emoteDuration) {
+    if (currentTime - emoteStartTime >= EMOTE_DURATION) {
       isSpecialEmote = false;
       lastEmoteTime = currentTime;
       nextEmoteDelay = random(5000, 12000);
@@ -667,7 +724,7 @@ void loadSpecialEmoteChars(int emoteType) {
   // Dynamically load special characters based on emote type
   // We'll use slots 6 and 7 for temporary special characters
   
-  switch(emoteType) {
+  switch (emoteType) {
     case 3: // Heart eyes
       lcd.createChar(6, heartEye);
       lcd.createChar(7, kissMouth);
