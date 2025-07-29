@@ -1,20 +1,22 @@
 ## Cura the Smart Trash Bin ^w^
 
-**Cura** is a smart trash bin project powered by Arduino and an ultrasonic sensor, featuring a cute animated LCD display. It measures the fill level of your trash bin and displays real-time status and fun animations to make waste management more engaging.
+![Cura Banner](Image/Cura.png)
+
+**Cura** is a smart trash bin project powered by Arduino and an ultrasonic sensor, featuring a cute animated LCD display. It measures the fill level of your trash bin and displays real-time status and fun animations to make waste management more engaging. (｡･ω･｡)
 
 ---
 
-### Features
+### Features ✧˖°
 - **Real-time Fill Level Monitoring:** Uses an ultrasonic sensor to measure how full your trash bin is.
 - **Animated LCD Display:** Shows cute expressions and progress bars on a 16x2 I2C LCD.
 - **Idle Mode:** Enters a screensaver-like mode with full-screen animations when the bin is not in use.
 - **Status Alerts:** Displays messages when the bin is almost full or getting full.
 - **Smooth Readings:** Uses averaging and smoothing to avoid flickering and false readings.
-- **Fun Startup Animation:** Greets you with a special message and face on boot.
+- **Fun Startup Animation:** Greets you with a special message and face on boot. UwU
 
 ---
 
-### Hardware Requirements
+### Hardware Requirements ⚙️
 - Arduino Uno (or compatible)
 - HC-SR04 Ultrasonic Distance Sensor
 - 16x2 I2C LCD Display (address 0x27)
@@ -29,9 +31,16 @@
 - **LCD:**
   - I2C SDA/SCL to Arduino SDA/SCL
 
+![Schematic Diagram](Image/sch.png)
+
 ---
 
-### Setup & Usage
+### Required Libraries ⚡
+- **LiquidCrystal_I2C:** [https://github.com/fdebrabander/Arduino-LiquidCrystal-I2C-library](https://github.com/fdebrabander/Arduino-LiquidCrystal-I2C-library)
+
+---
+
+### Setup & Usage OwO
 1. **Wiring:**
    - Connect the ultrasonic sensor and LCD as described above.
 2. **Upload Code:**
@@ -47,17 +56,27 @@
 
 ---
 
-### Customization
+### Calibration Tool =.=
+The project includes a sensor calibration utility (`sensorcalibrator.ino`) to help you determine the correct empty distance value for your specific trash bin:
+
+1. Upload `sensorcalibrator.ino` to your Arduino.
+2. Position the sensor where it will be mounted in your final setup.
+3. Note the distance (in cm) when the bin is empty.
+4. Use this value as `EMPTY_DISTANCE` in `cura.ino`.
+
+---
+
+### Customization ^_^
 - Adjust `EMPTY_DISTANCE` in the code to match your bin's empty distance (in cm).
 - Tweak animation timings or add new emotes in `cura.ino` for more personality.
 
 ---
 
-### License
+### License +_+
 MIT License. See `LICENSE` file if present.
 
 ---
 
-### Credits
+### Credits ^-^
 Created by [mykeyy](https://github.com/mykeyy)
 # Cura
