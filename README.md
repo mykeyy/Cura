@@ -31,6 +31,7 @@
 - **LCD:**
   - I2C SDA/SCL to Arduino SDA/SCL
 
+# Schematic Diagram
 ![Schematic Diagram](Image/SCH.png)
 
 ---
