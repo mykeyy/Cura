@@ -1,4 +1,4 @@
-## Cura the Smart Trash Bin ^w^
+## Cura the Smart Trash Bin ^_^
 
 ![Cura Banner](Image/Cura.png)
 
@@ -16,7 +16,7 @@
 
 ---
 
-### Hardware Requirements ⚙️
+### Hardware Requirements ✧˖✧
 - Arduino Uno (or compatible)
 - HC-SR04 Ultrasonic Distance Sensor
 - 16x2 I2C LCD Display (address 0x27)
@@ -31,27 +31,40 @@
 - **LCD:**
   - I2C SDA/SCL to Arduino SDA/SCL
 
-![Schematic Diagram](Image/sch.png)
+![Schematic Diagram](Image/SCH.png)
 
 ---
 
-### Required Libraries ⚡
+### Required Libraries 
 - **LiquidCrystal_I2C:** [https://github.com/fdebrabander/Arduino-LiquidCrystal-I2C-library](https://github.com/fdebrabander/Arduino-LiquidCrystal-I2C-library)
 
 ---
 
-### Setup & Usage OwO
-1. **Wiring:**
+
+### Setup & Usage
+
+**Recommended Workflow:**
+
+1. **Wire the Hardware**
    - Connect the ultrasonic sensor and LCD as described above.
-2. **Upload Code:**
+
+2. **Calibrate the Sensor (First Time Setup)**
+   - Open `sensorcalibrator.ino` in the Arduino IDE.
+   - Upload to your Arduino.
+   - Place the sensor in its final position on your bin.
+   - Note the empty bin distance (in cm) shown on the LCD.
+   - Use this value as `EMPTY_DISTANCE` in `cura.ino`.
+
+3. **Configure & Upload Main Code**
    - Open `cura.ino` in the Arduino IDE.
+   - Set `EMPTY_DISTANCE` to your measured value.
    - Install the `LiquidCrystal_I2C` library if not already installed.
    - Select your board and port, then upload the sketch.
-3. **Power Up:**
+
+4. **Power Up & Use**
    - Power the Arduino. The LCD will display a welcome message, then start monitoring the bin.
-4. **Operation:**
    - The LCD shows the trash fill percentage and a progress bar.
-   - When idle, Cura displays cute full-screen animations.
+   - When idle, Cura displays full-screen ASCII animations.
    - Alerts appear as the bin gets full.
 
 ---
