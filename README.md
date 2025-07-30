@@ -93,4 +93,3 @@ MIT License. See `LICENSE` file if present.
 
 ### Credits ^-^
 Created by [mykeyy](https://github.com/mykeyy)
-# Cura
